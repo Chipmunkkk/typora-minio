@@ -11,6 +11,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"path"
 	"strings"
 )
 
@@ -62,11 +63,12 @@ func main() {
 
 	log.Printf("发现[%v]张图片,开始上传...", len(imagePaths))
 	var minioImagePaths []string
-	for index, path := range imagePaths {
-		fileName := uuid.New().String() // 利用 uuid 作为文件名, 避免重复
-		contentType, _ := GetFileContentTypeWithPath(path)
+	for index, filePath := range imagePaths {
+		ext := path.Ext(filePath)
+		fileName := uuid.New().String() + ext // 利用 uuid 作为文件名, 避免重复
+		contentType, _ := GetFileContentTypeWithPath(filePath)
 		// 上传
-		info, err := minioClient.FPutObject(ctx, bucket, fileName, path, minio.PutObjectOptions{ContentType: contentType})
+		info, err := minioClient.FPutObject(ctx, bucket, fileName, filePath, minio.PutObjectOptions{ContentType: contentType})
 		log.Printf("上传 %v/%v", index+1, len(imagePaths))
 		if err != nil {
 			log.Fatalln(err)
