@@ -1,0 +1,6 @@
+minio:
+  endpoint: xxxx.xx # minio 的地址
+  access_id: xxxx # minio 的用户名
+  secret_key: xxxx # minio 的密码
+  region: xxxx # minio 所属的区域
+  bucket: xxxx # 要上传的 bucket
